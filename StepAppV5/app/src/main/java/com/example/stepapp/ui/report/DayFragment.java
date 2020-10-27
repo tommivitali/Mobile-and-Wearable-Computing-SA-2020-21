@@ -21,6 +21,7 @@ import com.anychart.enums.TooltipPositionMode;
 import com.example.stepapp.R;
 import com.example.stepapp.StepAppOpenHelper;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +67,17 @@ public class DayFragment extends Fragment {
         // 2. Create data entries for x and y axis of the graph
         List<DataEntry> data = new ArrayList<>();
 
+        LocalDate endDate = LocalDate.now().plusDays(1);
+        LocalDate startDate = endDate.minusDays(4); // shows last 4 days
+
+        for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1))
+            data.add(new ValueDataEntry(date.toString(),
+                                        graph_map.containsKey(date.toString()) ? graph_map.get(date.toString()) : 0));
+
+        /*
         for (Map.Entry<String,Integer> entry : graph_map.entrySet())
             data.add(new ValueDataEntry(entry.getKey(), entry.getValue()));
+         */
 
         // 3. Add the data to column chart and get the columns
         Column column = cartesian.column(data);
